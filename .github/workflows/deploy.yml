@@ -37,7 +37,3 @@ jobs:
         with:
           version: '${{ env.VERSION }}'
           environment: '${{ inputs.environment }}'
-          aws-account-id: '${{ vars.AWS_ACCOUNT_ID }}'
-          aws-region: '${{ vars.AWS_REGION }}'
-          aws-account-id-ecr-src: '${{ vars.AWS_ACCOUNT_ID_ECR_SRC }}'
-          aws-region-ecr-src: '${{ vars.AWS_REGION_ECR_SRC }}'
