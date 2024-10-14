@@ -1,0 +1,24 @@
+name: Configure AWS credentials
+description: >-
+  Authenticates to AWS, allowing access to the account in subsequent steps.
+
+inputs:
+  aws-account-id:
+    description: The AWS account to authenticate to
+    required: true
+  aws-region:
+    description: The AWS region to use
+    required: true
+  aws-assume-role:
+    description: The AWS role to assume
+    required: false
+    default: 'gh-actions-service-deploy-role'
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/${{ inputs.aws-assume-role }}
+        aws-region: ${{ inputs.aws-region }}

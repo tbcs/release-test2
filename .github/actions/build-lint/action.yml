@@ -1,0 +1,23 @@
+name: Build and validate
+description: >-
+  Performs a build, runs validations and linters.
+
+runs:
+  using: composite
+  steps:
+    - name: Build
+      shell: bash
+      run: |
+        ./gradlew clean build -x check -x test
+
+    - name: Create Docker image
+      id: build-docker-image
+      shell: bash
+      run: |
+        ./gradlew jibDockerBuild -Djib.to.image='route-sequencer:latest'
+        docker images
+
+    - name: Run linters
+      shell: bash
+      run: |
+        ./gradlew check -x test

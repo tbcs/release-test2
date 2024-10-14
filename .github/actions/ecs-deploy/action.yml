@@ -1,0 +1,52 @@
+name: Deploy service to ECS
+description: >-
+  Updates a service in AWS ECS, forcing a new deployment to happen.
+
+inputs:
+  aws-account-id:
+    description: The AWS account to deploy into
+    required: true
+  aws-region:
+    description: The region of the deployment AWS account
+    required: true
+  cluster:
+    description: The name of the ECS cluster in which the service is deployed
+    required: true
+  service:
+    description: The name of the ECS service running the service's tasks
+    required: true
+  await-completion:
+    description: >-
+      Whether to wait for the deployment's successful completion, awaiting the ECS service to reach a stable state
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      uses: ./.github/actions/aws-auth
+      with:
+        aws-account-id: ${{ inputs.aws-account-id }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - name: Deploy service to ECS
+      shell: bash
+      run: |
+        aws ecs update-service --force-new-deployment \
+          --cluster '${{ inputs.cluster }}' \
+          --service '${{ inputs.service }}' \
+        | jq 'del(.service.events)'
+
+    - name: Await completion of deployment
+      if: ${{ inputs.await-completion != 'false' }}
+      shell: bash
+      run: |
+        for i in {1..3}; do
+          aws ecs wait services-stable \
+            --cluster '${{ inputs.cluster }}' \
+            --service '${{ inputs.service }}' \
+          && exit 0
+        done
+        echo "::error::ECS deployment failed: service did not reach stable state"
+        exit 1

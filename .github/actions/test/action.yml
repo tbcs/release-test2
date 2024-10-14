@@ -1,0 +1,13 @@
+name: Test
+description: >-
+  Runs the project's test suite.
+
+runs:
+  using: composite
+  steps:
+    - name: Run tests
+      shell: bash
+      run: |
+        # fail fast unless running in debug mode
+        FAIL_FAST=$([ -n "${RUNNER_DEBUG:-}" ] || echo "--fail-fast")
+        ./gradlew test $FAIL_FAST

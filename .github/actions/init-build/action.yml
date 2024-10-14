@@ -1,0 +1,52 @@
+name: Initialize build environment
+description: >-
+  Prepares a JDK build environment with Gradle.
+
+inputs:
+  pkg-actor:
+    description: Actor for accessing GitHub Packages & Container Registry
+    required: true
+  pkg-token:
+    description: Token for accessing GitHub Packages & Container Registry
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Configure credentials for GitHub Packages & Container Registry
+      shell: bash
+      run: |
+        echo PKG_ACTOR="${{ inputs.pkg-actor }}" >> $GITHUB_ENV
+        echo PKG_TOKEN="${{ inputs.pkg-token }}" >> $GITHUB_ENV
+
+    - name: Set up Java/JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: corretto
+        java-version: 17
+        cache: gradle
+
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Configure Gradle
+      shell: bash
+      run: |
+        echo GRADLE_OPTS="\
+          ${GRADLE_OPTS:-} \
+          -Dorg.gradle.daemon=false \
+          -Djib.console=plain \
+          ${RUNNER_DEBUG:+-Dorg.gradle.logging.stacktrace=all} \
+          " >> $GITHUB_ENV
+
+    - name: Download Gradle wrapper
+      shell: bash
+      run: |
+        ./gradlew --dry-run
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ env.PKG_ACTOR }}
+        password: ${{ env.PKG_TOKEN }}

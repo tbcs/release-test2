@@ -1,0 +1,73 @@
+name: Copy Docker image between two ECR repositories
+description: >-
+  Copies a Docker image from one AWS ECR repository to another (src -> dst).
+
+inputs:
+  src-aws-account-id:
+    description: The AWS account to copy from
+    required: true
+  dst-aws-account-id:
+    description: The AWS account to copy to
+    required: true
+  src-aws-region:
+    description: The region of the AWS account to copy from
+    required: true
+  dst-aws-region:
+    description: The region of the AWS account to copy to
+    required: true
+  src-ecr-repository-name:
+    description: The name of the ECR repository to copy from
+    required: true
+  dst-ecr-repository-name:
+    description: The name of the ECR repository to copy to
+    required: true
+  src-tag:
+    description: The Docker image tag to copy from
+    required: true
+  dst-tag:
+    description: The Docker image tag to copy to
+    required: true
+  tag-latest:
+    description: Whether to tag the Docker image on the destination ECR repository with 'latest'
+    required: false
+    default: 'false'
+
+outputs:
+  docker-image:
+    description: The Docker image's full name (incl. tag) on the destination
+    value: ${{ steps.copy-docker-image.outputs.docker-image }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install crane
+      uses: ./.github/actions/install-crane
+
+    - name: Log in to ECR (src)
+      uses: ./.github/actions/ecr-login
+      with:
+        aws-account-id: ${{ inputs.src-aws-account-id }}
+        aws-region: ${{ inputs.src-aws-region }}
+
+    - name: Log in to ECR (dst)
+      uses: ./.github/actions/ecr-login
+      with:
+        aws-account-id: ${{ inputs.dst-aws-account-id }}
+        aws-region: ${{ inputs.dst-aws-region }}
+
+    - name: Copy Docker image
+      id: copy-docker-image
+      shell: bash
+      run: |
+        # increase verbosity when in debug mode
+        VERBOSE=$([ -z "${RUNNER_DEBUG:-}" ] || echo "-v")
+
+        src="${{ inputs.src-aws-account-id }}.dkr.ecr.${{ inputs.src-aws-region }}.amazonaws.com/${{ inputs.src-ecr-repository-name }}:${{ inputs.src-tag }}"
+        dst="${{ inputs.dst-aws-account-id }}.dkr.ecr.${{ inputs.dst-aws-region }}.amazonaws.com/${{ inputs.dst-ecr-repository-name }}:${{ inputs.dst-tag }}"
+
+        crane $VERBOSE copy $src $dst
+        echo "docker-image=$dst" >> "$GITHUB_OUTPUT"
+
+        if [ "${{ inputs.tag-latest }}" != "false" ]; then
+          crane $VERBOSE tag $dst 'latest'
+        fi
