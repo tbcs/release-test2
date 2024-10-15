@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 100  # allows one of the last 100 commits to be tagged
 
       - name: Tag commit
         shell: bash
