@@ -1,0 +1,45 @@
+name: Tag commit
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit-hash:
+        description: Commit to tag
+        type: string
+        required: true
+      tag-name:
+        description: Tag name
+        type: string
+        required: true
+      tag-message:
+        description: Tag message
+        type: string
+        required: false
+
+jobs:
+  deploy:
+    name: Tag commit '${{ inputs.commit-hash }}'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      # id-token: write # XXX ??
+      contents: write # XXX ??
+      # deployments: write  # XXX ??
+    # environment: 'dev'  # XXX ??
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Publish Docker image
+        shell: bash
+        env:
+          COMMIT_HASH: ${{ inputs.commit-hash }}
+          TAG_NAME: ${{ inputs.tag-name }}
+          TAG_MESSAGE: ${{ inputs.tag-message }}
+        run: |
+          git tag \
+            --annotate "$TAG_NAME" \
+            --message "$TAG_MESSAGE" \
+            "$COMMIT_HASH"
+          git push --tags
+          echo "::notice::Commit '$COMMIT_HASH' was tagged with '$TAG_NAME'"
