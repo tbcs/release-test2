@@ -38,6 +38,10 @@ jobs:
           COMMIT_HASH: ${{ inputs.commit-hash }}
           TAG_NAME: ${{ inputs.tag-name }}
           TAG_MESSAGE: ${{ inputs.tag-message }}
+          GIT_AUTHOR_NAME: ${{ github.actor }}
+          GIT_COMMITTER_NAME: ${{ github.actor }}
+          GIT_AUTHOR_EMAIL: ${{ github.actor }}@users.noreply.github.com
+          GIT_COMMITTER_EMAIL: ${{ github.actor }}@users.noreply.github.com
         run: |
           git tag \
             --annotate "$TAG_NAME" \
