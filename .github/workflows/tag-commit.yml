@@ -1,4 +1,4 @@
-name: Tag commit
+name: Tag commit '${{ inputs.commit-hash }}' # XXX
 
 on:
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Publish Docker image
+      - name: Tag commit
         shell: bash
         env:
           COMMIT_HASH: ${{ inputs.commit-hash }}
