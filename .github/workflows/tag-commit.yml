@@ -1,4 +1,4 @@
-name: Tag commit '${{ inputs.commit-hash }}' # XXX
+name: Tag commit
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ on:
 
 jobs:
   deploy:
-    name: Tag commit '${{ inputs.commit-hash }}'
+    name: Tag commit
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
