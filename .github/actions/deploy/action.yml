@@ -24,6 +24,7 @@ runs:
     - name: Deploy
       shell: bash
       run: |
+        echo deploying version '${{ inputs.version }}'
         sleep 5
         echo "deployment completed"
 
