@@ -20,6 +20,7 @@ runs:
       with:
         token: ${{ github.token }}
         environment: ${{ inputs.environment }}
+        payload: "https://github.com/actions/runner/issues/2120"  # allows filtering of deployments
 
     - name: Deploy
       shell: bash

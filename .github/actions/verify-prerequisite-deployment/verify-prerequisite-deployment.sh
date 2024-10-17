@@ -12,13 +12,6 @@ set -eu
 repo_owner=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f1)
 repo_name=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f2)
 
-jq_query='
-.data.repository.deployments.nodes
-| map(select(.latestStatus.state == "INACTIVE" or .latestStatus.state == "SUCCESS"))
-| map(select(.commitOid | startswith($commit_prefix)))
-| first | .createdAt // ""
-'
-
 graphql_query='
 query($repoOwner: String!, $repoName: String!, $environment: String!) {
   repository(owner: $repoOwner, name: $repoName) {
@@ -26,16 +19,24 @@ query($repoOwner: String!, $repoName: String!, $environment: String!) {
                 environments: [$environment],
                 orderBy: {field: CREATED_AT, direction: DESC}) {
       nodes {
-        id
         createdAt
         latestStatus {
           state
         }
         commitOid
+        payload
       }
     }
   }
 }
+'
+
+jq_query='
+.data.repository.deployments.nodes
+| map(select(.latestStatus.state == "INACTIVE" or .latestStatus.state == "SUCCESS"))
+| map(select(.payload == "https://github.com/actions/runner/issues/2120"))
+| map(select(.commitOid | startswith($commit_prefix)))
+| first | .createdAt // ""
 '
 
 latest_deployment=$(gh api graphql \
