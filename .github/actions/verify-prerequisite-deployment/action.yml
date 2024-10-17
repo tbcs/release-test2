@@ -30,4 +30,4 @@ runs:
         DEPLOYMENT_ENVIRONMENT: ${{ inputs.deployment-environment }}
         PREREQUISITE_ENVIRONMENT: ${{ inputs.prerequisite-environment }}
         DEPLOYMENT_PAYLOAD_MARKER: ${{ inputs.deployment-payload-marker }}
-      run: ./.github/actions/verify-prerequisite-deployment/verify-prerequisite-deployment.sh
+      run: ./.github/actions/verify-prerequisite-deployment/action.sh
