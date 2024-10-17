@@ -54,7 +54,7 @@ latest_deployment=$(gh api graphql \
 
 if [ -n "$latest_deployment" ]; then
   echo "::notice::Version '$VERSION' has been previously deployed to" \
-       "environment '$DEPLOYMENT_ENVIRONMENT' at $latest_deployment."
+       "environment '$PREREQUISITE_ENVIRONMENT' at $latest_deployment."
   exit 0
 else
   echo "::error::Deployment aborted:" \
