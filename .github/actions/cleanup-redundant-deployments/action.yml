@@ -26,4 +26,4 @@ runs:
         VERSION: ${{ inputs.version }}
         DEPLOYMENT_ENVIRONMENT: ${{ inputs.deployment-environment }}
         DEPLOYMENT_PAYLOAD_MARKER: ${{ inputs.deployment-payload-marker }}
-      run: ./.github/actions/delete-redundant-deployments/action.sh
+      run: ./.github/actions/cleanup-redundant-deployments/action.sh
