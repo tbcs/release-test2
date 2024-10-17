@@ -21,7 +21,7 @@ runs:
       uses: ./.github/actions/verify-prerequisite-deployment
       with:
         version: ${{ inputs.version }}
-        deployment-environment: ${{ inputs.deployment-environment }}
+        deployment-environment: ${{ inputs.environment }}
         prerequisite-environment: ${{ inputs.prerequisite-environment }}
 
     - name: Create GitHub deployment

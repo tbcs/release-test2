@@ -35,3 +35,4 @@ jobs:
         with:
           version: '${{ env.VERSION }}'
           environment: 'dev'
+          prerequisite-environment: 'xxx'
