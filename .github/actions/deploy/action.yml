@@ -30,7 +30,7 @@ runs:
         deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
     # #    XXXX https://github.com/actions/runner/issues/2120
-    # - name: Remove redundant GitHub deployment object
+    # - name: Delete redundant GitHub deployment object
     #   uses: ./.github/actions/verify-prerequisite-deployment
     #   with:
     #     version: ${{ inputs.version }}

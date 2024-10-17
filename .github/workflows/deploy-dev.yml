@@ -20,6 +20,7 @@ jobs:
       - name: Set version
         uses: ./.github/actions/set-version
         with:
+          # XXX comment / explain
           version: 'feature'
 
       - name: Build and validate

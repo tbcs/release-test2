@@ -19,7 +19,7 @@ query ($repoOwner: String!, $repoName: String!, $environment: String!) {
       orderBy: {field: CREATED_AT, direction: DESC}
     ) {
       nodes {
-        id
+        databaseId
         createdAt
         latestStatus {
           state
