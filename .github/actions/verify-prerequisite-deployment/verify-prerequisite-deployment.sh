@@ -11,12 +11,15 @@ repo_owner=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f1)
 repo_name=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f2)
 
 graphql_query='
-query($repoOwner: String!, $repoName: String!, $environment: String!) {
+query ($repoOwner: String!, $repoName: String!, $environment: String!) {
   repository(owner: $repoOwner, name: $repoName) {
-    deployments(first: 100,
-                environments: [$environment],
-                orderBy: {field: CREATED_AT, direction: DESC}) {
+    deployments(
+      first: 100
+      environments: [$environment]
+      orderBy: {field: CREATED_AT, direction: DESC}
+    ) {
       nodes {
+        id
         createdAt
         latestStatus {
           state
@@ -32,8 +35,8 @@ query($repoOwner: String!, $repoName: String!, $environment: String!) {
 jq_query='
 .data.repository.deployments.nodes
 | map(select(.latestStatus.state == "INACTIVE" or .latestStatus.state == "SUCCESS"))
-| map(select(.commitOid | startswith($commit_prefix)))
-| map(select((.payload // "") | contains("https://github.com/actions/runner/issues/2120")))
+| map(select(.commitOid | startswith($version)))
+| map(select((.payload // "") | contains($deploymentPayloadMarker)))
 | first | .createdAt // ""
 '
 
@@ -42,7 +45,9 @@ latest_deployment=$(gh api graphql \
   -F repoName="$repo_name" \
   -F environment="$PREREQUISITE_ENVIRONMENT" \
   -f query="$graphql_query" \
-  | jq -r --arg commit_prefix "$VERSION" "$jq_query")
+  | jq -r \
+    --arg version "$VERSION" \
+    --arg deploymentPayloadMarker "$DEPLOYMENT_PAYLOAD_MARKER" "$jq_query")
 
 if [ -n "$latest_deployment" ]; then
   echo "::notice::Version '$VERSION' has been previously deployed to" \

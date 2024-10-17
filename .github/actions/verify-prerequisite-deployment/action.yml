@@ -15,6 +15,9 @@ inputs:
   prerequisite-environment:
     description: The name of the GitHub environment that must have a successful prior deployment
     required: true
+  deployment-payload-marker:
+    description: The value used for marking deployments of interest
+    required: true
 
 runs:
   using: composite
@@ -26,4 +29,5 @@ runs:
         VERSION: ${{ inputs.version }}
         DEPLOYMENT_ENVIRONMENT: ${{ inputs.deployment-environment }}
         PREREQUISITE_ENVIRONMENT: ${{ inputs.prerequisite-environment }}
+        DEPLOYMENT_PAYLOAD_MARKER: ${{ inputs.deployment-payload-marker }}
       run: ./.github/actions/verify-prerequisite-deployment/verify-prerequisite-deployment.sh
