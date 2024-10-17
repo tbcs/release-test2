@@ -9,6 +9,12 @@ set -eu
 
 # ----
 
+if [ -z "$PREREQUISITE_ENVIRONMENT" ]; then
+  echo "::notice::Check passed: No prerequisite deployment is required for deployment to " \
+       "'$DEPLOYMENT_ENVIRONMENT'."
+  exit 0
+fi
+
 repo_owner=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f1)
 repo_name=$(echo "${GITHUB_REPOSITORY}" | cut -d'/' -f2)
 
