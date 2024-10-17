@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy to 'dev'
+  build-publish:
+    name: Build and publish Docker image
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -30,9 +30,16 @@ jobs:
         run: |
           echo "published docker image"
 
-      - name: Deploy service
-        uses: ./.github/actions/deploy
-        with:
-          version: '${{ env.VERSION }}'
-          environment: 'dev'
-          prerequisite-environment: 'xxx'
+      # - name: Deploy service
+      #   uses: ./.github/actions/deploy
+      #   with:
+      #     version: '${{ env.VERSION }}'
+      #     environment: 'dev'
+      #     prerequisite-environment: 'xxx'
+
+  deploy:
+    name: Deploy to 'dev'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: 'dev'
+      prerequisite-environment: 'xxx2'
