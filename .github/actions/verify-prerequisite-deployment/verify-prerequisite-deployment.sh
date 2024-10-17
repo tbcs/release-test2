@@ -48,7 +48,7 @@ jq_query='
 latest_deployment=$(gh api graphql \
   -F repoOwner="$repo_owner" \
   -F repoName="$repo_name" \
-  -F environment="$DEPLOYMENT_ENVIRONMENT" \
+  -F environment="$PREREQUISITE_ENVIRONMENT" \
   -f query="$graphql_query" \
   | jq -r --arg commit_prefix "$VERSION" "$jq_query")
 
