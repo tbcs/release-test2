@@ -22,8 +22,7 @@ runs:
     - name: Verify prerequisite deployment
       shell: bash
       env:
-        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # GITHUB_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
         VERSION: ${{ inputs.version }}
         DEPLOYMENT_ENVIRONMENT: ${{ inputs.deployment-environment }}
         PREREQUISITE_ENVIRONMENT: ${{ inputs.prerequisite-environment }}
