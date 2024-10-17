@@ -1,0 +1,29 @@
+name: Verify prerequisite deployment
+description: >-
+  Ensures that a specific version has been successfully deployed to a prerequisite environment
+  before allowing deployment to the target environment.  This action checks if the deployment
+  condition is satisfied, such as verifying a prior deployment to 'stage' before deploying to
+  'prod'.
+
+inputs:
+  version:
+    description: The version of the service and its build artifacts to be deployed
+    required: true
+  deployment-environment:
+    description: The name of the GitHub environment to which the service is being deployed
+    required: true
+  prerequisite-environment:
+    description: The name of the GitHub environment that must have a successful prior deployment
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Verify prerequisite deployment
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VERSION: ${{ inputs.version }}
+        DEPLOYMENT_ENVIRONMENT: ${{ inputs.deployment-environment }}
+        PREREQUISITE_ENVIRONMENT: ${{ inputs.prerequisite-environment }}
+      run: ./verify-prerequisite-deployment.sh
