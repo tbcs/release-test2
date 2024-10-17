@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-publish:
-    name: Build and publish Docker image
+    name: Build, publish Docker image
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -40,6 +40,7 @@ jobs:
   deploy:
     name: Deploy to 'dev'
     uses: ./.github/workflows/deploy.yml
+    needs: build-test-publish
     with:
       environment: 'dev'
       prerequisite-environment: 'xxx2'
