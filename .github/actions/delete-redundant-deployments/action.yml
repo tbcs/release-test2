@@ -1,0 +1,29 @@
+name: Delete redundant GitHub deployment objects
+description: >-
+  Deletes deployments which have been created automatically by GitHub simply because a workflow
+  referenced an environment, e.g. to use environment specific variables and secrets (for details see
+  https://github.com/actions/runner/issues/2120).  These deployments are redundant and confusing.
+  This action deletes these 'zombie' objects.
+
+inputs:
+  version:
+    description: The version of the service and its build artifacts to be deployed
+    required: true
+  deployment-environment:
+    description: The name of the GitHub environment to which the service is being deployed
+    required: true
+  deployment-payload-marker:
+    description: The value used for marking deployments of interest
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Verify prerequisite deployment
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        VERSION: ${{ inputs.version }}
+        DEPLOYMENT_ENVIRONMENT: ${{ inputs.deployment-environment }}
+        DEPLOYMENT_PAYLOAD_MARKER: ${{ inputs.deployment-payload-marker }}
+      run: ./.github/actions/delete-redundant-deployments/action.sh

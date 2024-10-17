@@ -29,14 +29,12 @@ runs:
         prerequisite-environment: ${{ inputs.prerequisite-environment }}
         deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
-    # #    XXXX https://github.com/actions/runner/issues/2120
-    # - name: Delete redundant GitHub deployment object
-    #   uses: ./.github/actions/verify-prerequisite-deployment
-    #   with:
-    #     version: ${{ inputs.version }}
-    #     deployment-environment: ${{ inputs.environment }}
-    #     prerequisite-environment: ${{ inputs.prerequisite-environment }}
-    #     deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
+    - name: Delete redundant GitHub deployment objects
+      uses: ./.github/actions/delete-redundant-deployments
+      with:
+        version: ${{ inputs.version }}
+        deployment-environment: ${{ inputs.environment }}
+        deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
     - name: Create GitHub deployment
       uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1  # v2.0.7
