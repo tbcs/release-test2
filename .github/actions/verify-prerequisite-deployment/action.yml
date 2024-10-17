@@ -27,4 +27,6 @@ runs:
         VERSION: ${{ inputs.version }}
         DEPLOYMENT_ENVIRONMENT: ${{ inputs.deployment-environment }}
         PREREQUISITE_ENVIRONMENT: ${{ inputs.prerequisite-environment }}
-      run: ./.github/actions/verify-prerequisite-deployment/verify-prerequisite-deployment.sh
+      run: |
+        env
+        ./.github/actions/verify-prerequisite-deployment/verify-prerequisite-deployment.sh
