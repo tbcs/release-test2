@@ -2,17 +2,6 @@ name: Deploy to 'dev'
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: Environment to deploy to
-        type: environment
-        required: true
-  workflow_call:
-    inputs:
-      environment:
-        description: Environment to deploy to
-        type: string
-        required: true
 
 jobs:
   deploy:
@@ -24,16 +13,25 @@ jobs:
       contents: read
       deployments: write
     environment: 'dev'
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set version
         uses: ./.github/actions/set-version
+        with:
+          version: 'feature'
+
+      - name: Build and validate
+        uses: ./.github/actions/build-lint
+
+      - name: Publish Docker image
+        shell: bash
+        run: |
+          echo "published docker image"
 
       - name: Deploy service
         uses: ./.github/actions/deploy
         with:
           version: '${{ env.VERSION }}'
-          environment: '${{ inputs.environment }}'
+          environment: 'dev'
