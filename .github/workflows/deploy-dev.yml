@@ -40,7 +40,7 @@ jobs:
   deploy:
     name: Deploy to 'dev'
     uses: ./.github/workflows/deploy.yml
-    needs: build-test-publish
+    needs: build-publish
     with:
       environment: 'dev'
       prerequisite-environment: 'xxx2'
