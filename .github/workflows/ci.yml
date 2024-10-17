@@ -1,5 +1,6 @@
 name: CI
 
+# exclude deploy branches etc.
 on:
   push:
 

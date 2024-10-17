@@ -1,0 +1,24 @@
+name: Deploy to 'prod'
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  deploy:
+    name: Deploy to 'prod'
+    if: |
+      github.event_name == 'release'
+      &&
+      github.event.release.prerelease == false
+      &&
+      (
+        startsWith(github.event.release.target_commitish, 'deploy/')
+        ||
+        startsWith(github.event.release.target_commitish, 'release/')
+        ||
+        startsWith(github.event.release.target_commitish, 'rollback/')
+      )
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: 'prod'

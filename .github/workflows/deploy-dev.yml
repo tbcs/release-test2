@@ -1,12 +1,12 @@
-name: Deploy
+name: Deploy to 'dev'
 
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     environment:
-  #       description: Environment to deploy to
-  #       type: environment
-  #       required: true
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        type: environment
+        required: true
   workflow_call:
     inputs:
       environment:
@@ -16,15 +16,15 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to '${{ inputs.environment }}'
+    name: Deploy to 'dev'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       id-token: write
       contents: read
       deployments: write
-    environment: '${{ inputs.environment }}'
-    #if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/release-')
+    environment: 'dev'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
