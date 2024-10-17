@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
 set -eu
 
-# DEPLOYMENT_ENVIRONMENT="prod"
-# PREREQUISITE_ENVIRONMENT="stage"
-# VERSION="aff43153"
-# #VERSION="xaff43153"
-# GITHUB_REPOSITORY="bettermile/bm-route-sequencer"
-
-# ----
-
 if [ -z "$PREREQUISITE_ENVIRONMENT" ]; then
   echo "::notice::Check passed: No prerequisite deployment is required for deployment to " \
-       "'$DEPLOYMENT_ENVIRONMENT'."
+    "'$DEPLOYMENT_ENVIRONMENT'."
   exit 0
 fi
 
@@ -54,11 +46,11 @@ latest_deployment=$(gh api graphql \
 
 if [ -n "$latest_deployment" ]; then
   echo "::notice::Version '$VERSION' has been previously deployed to" \
-       "environment '$PREREQUISITE_ENVIRONMENT' at $latest_deployment."
+    "environment '$PREREQUISITE_ENVIRONMENT' at $latest_deployment."
   exit 0
 else
   echo "::error::Deployment aborted:" \
-       "deployment to '$DEPLOYMENT_ENVIRONMENT' requires a successful prior deployment" \
-       "to '$PREREQUISITE_ENVIRONMENT', but none was found."
+    "deployment to '$DEPLOYMENT_ENVIRONMENT' requires a successful prior deployment" \
+    "to '$PREREQUISITE_ENVIRONMENT', but none was found."
   exit 1
 fi
