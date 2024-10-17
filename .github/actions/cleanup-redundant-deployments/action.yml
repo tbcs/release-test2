@@ -1,9 +1,9 @@
-name: Delete redundant GitHub deployment objects
+name: Clean up redundant GitHub deployments
 description: >-
-  Deletes deployments which have been created automatically by GitHub simply because a workflow
-  referenced an environment, e.g. to use environment specific variables and secrets (for details see
-  https://github.com/actions/runner/issues/2120).  These deployments are redundant and confusing.
-  This action deletes these 'zombie' objects.
+  Deletes redundant GitHub deployment objects created automatically when workflows reference an
+  environment, e.g. to access environment-specific variables or secrets (see
+  https://github.com/actions/runner/issues/2120).  These deployments are unnecessary and may cause
+  confusion. This action deletes such 'zombie' deployments.
 
 inputs:
   version:
@@ -13,7 +13,7 @@ inputs:
     description: The name of the GitHub environment to which the service is being deployed
     required: true
   deployment-payload-marker:
-    description: The value used for marking deployments of interest
+    description: Marker used to identify deployments to be excluded from the cleanup
     required: true
 
 runs:

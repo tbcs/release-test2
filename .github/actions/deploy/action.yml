@@ -14,9 +14,9 @@ inputs:
     description: The name of the GitHub environment that must have a successful prior deployment
     required: true
   deployment-payload-marker:
-    description: A value that marks deployments performed by this action
+    description: Marker used to identify deployments created by this action
     required: false
-    default: FOOBAR
+    default: github-actions-deploy
 
 runs:
   using: composite
@@ -29,8 +29,8 @@ runs:
         prerequisite-environment: ${{ inputs.prerequisite-environment }}
         deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
-    - name: Delete redundant GitHub deployment objects
-      uses: ./.github/actions/delete-redundant-deployments
+    - name: Clean up redundant GitHub deployments
+      uses: ./.github/actions/cleanup-redundant-deployments
       with:
         version: ${{ inputs.version }}
         deployment-environment: ${{ inputs.environment }}

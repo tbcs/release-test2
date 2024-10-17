@@ -16,7 +16,7 @@ inputs:
     description: The name of the GitHub environment that must have a successful prior deployment
     required: true
   deployment-payload-marker:
-    description: The value used for marking deployments of interest
+    description: Marker used to identify deployments of interest
     required: true
 
 runs:
