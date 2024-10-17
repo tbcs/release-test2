@@ -41,7 +41,7 @@ jq_query='
 .data.repository.deployments.nodes
 | map(select(.latestStatus.state == "INACTIVE" or .latestStatus.state == "SUCCESS"))
 | map(select(.commitOid | startswith($commit_prefix)))
-| map(select(.payload | contains("https://github.com/actions/runner/issues/2120")))
+| map(select((.payload // "") | contains("https://github.com/actions/runner/issues/2120")))
 | first | .createdAt // ""
 '
 
