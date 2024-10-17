@@ -16,7 +16,7 @@ inputs:
   deployment-payload-marker:
     description: Marker used to identify deployments created by this action
     required: false
-    default: github-actions-deploy
+    default: '{"name": "github-actions-deploy"}'
 
 runs:
   using: composite
