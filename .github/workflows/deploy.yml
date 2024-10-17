@@ -1,18 +1,17 @@
 name: Deploy
 
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     environment:
-  #       description: Environment to deploy to
-  #       type: environment
-  #       required: true
   workflow_call:
     inputs:
       environment:
-        description: Environment to deploy to
+        description: The name of the GitHub environment to which the service is being deployed
         type: string
         required: true
+      prerequisite-environment:
+        description: The name of the GitHub environment that must have a successful prior deployment
+        type: string
+        required: false
+        default: ""  # none
 
 jobs:
   deploy:
@@ -24,7 +23,6 @@ jobs:
       contents: read
       deployments: write
     environment: '${{ inputs.environment }}'
-    #if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/release-')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,3 +35,4 @@ jobs:
         with:
           version: '${{ env.VERSION }}'
           environment: '${{ inputs.environment }}'
+          prerequisite-environment: '${{ inputs.prerequisite-environment }}'

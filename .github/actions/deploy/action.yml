@@ -8,12 +8,22 @@ inputs:
     description: The version of the service and its build artifacts
     required: true
   environment:
-    description: The name of the GitHub deployment environment
+    description: The name of the GitHub environment to which the service is being deployed
+    required: true
+  prerequisite-environment:
+    description: The name of the GitHub environment that must have a successful prior deployment
     required: true
 
 runs:
   using: composite
   steps:
+    - name: Verify prerequisite deployment
+      uses: ./.github/actions/verify-prerequisite-deployment
+      with:
+        version: ${{ inputs.version }}
+        deployment-environment: ${{ inputs.deployment-environment }}
+        prerequisite-environment: ${{ inputs.prerequisite-environment }}
+
     - name: Create GitHub deployment
       uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1  # v2.0.7
       id: create-deployment

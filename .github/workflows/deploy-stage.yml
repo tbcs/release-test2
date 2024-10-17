@@ -12,3 +12,4 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: 'stage'
+      prerequisite-environment: 'dev'
