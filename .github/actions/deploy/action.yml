@@ -16,7 +16,6 @@ inputs:
   deployment-payload-marker:
     description: Marker used to identify deployments created by this action
     required: false
-    # default: '{"name": "github-actions-deploy"}'
     default: github-actions-deploy
 
 runs:
@@ -30,21 +29,20 @@ runs:
         prerequisite-environment: ${{ inputs.prerequisite-environment }}
         deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
-    - name: Clean up redundant GitHub deployments
-      uses: ./.github/actions/cleanup-redundant-deployments
-      with:
-        version: ${{ inputs.version }}
-        deployment-environment: ${{ inputs.environment }}
-        deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
-
     - name: Create GitHub deployment
       uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1  # v2.0.7
       id: create-deployment
       with:
         token: ${{ github.token }}
         environment: ${{ inputs.environment }}
-        # payload: ${{ inputs.deployment-payload-marker }}
         payload: '{"name": "${{ inputs.deployment-payload-marker }}"}'
+
+    - name: Clean up redundant GitHub deployments
+      uses: ./.github/actions/cleanup-redundant-deployments
+      with:
+        version: ${{ inputs.version }}
+        deployment-environment: ${{ inputs.environment }}
+        deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
     - name: Deploy
       shell: bash
