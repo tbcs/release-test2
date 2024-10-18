@@ -60,6 +60,11 @@ runs:
         sleep 5
         echo "deployment completed"
 
+    - name: sleep before success
+      shell: bash
+      run: |
+        sleep 30
+
     - name: Update deployment status (success)
       if: success()
       uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806  # v2.0.3
