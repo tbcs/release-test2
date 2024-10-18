@@ -2,9 +2,8 @@ name: Deploy to 'stage'
 
 on:
   push:
-    branches:
+    tags:
       - deploy/*
-      - release/*
 
 jobs:
   deploy:

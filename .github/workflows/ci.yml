@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    branches-ignore:
-      - 'release/**'
-      - 'rollback/**'
+    tags-ignore:
+      - '**'
 
 jobs:
   build-test-publish:

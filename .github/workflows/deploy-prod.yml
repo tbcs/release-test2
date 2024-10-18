@@ -12,11 +12,7 @@ jobs:
       &&
       github.event.release.prerelease == false
       &&
-      (
-        startsWith(github.event.release.target_commitish, 'release/')
-        ||
-        startsWith(github.event.release.target_commitish, 'rollback/')
-      )
+      startsWith(github.ref, 'refs/tags/deploy/')
     uses: ./.github/workflows/deploy.yml
     with:
       environment: 'prod'
