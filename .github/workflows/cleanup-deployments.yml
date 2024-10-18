@@ -1,11 +1,11 @@
 name: Clean up redundant GitHub deployments
 
-on:
-  deployment_status
+on: [deployment_status]
 
 jobs:
   cleanup:
     name: Clean up redundant GitHub deployments
+    if: ${{ github.event.deployment_status.state == 'xxxxsuccess' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
