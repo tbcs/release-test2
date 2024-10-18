@@ -40,7 +40,7 @@ runs:
       with:
         token: ${{ github.token }}
         environment: ${{ inputs.environment }}
-        payload: '{"name": "${{ inputs.deployment-payload-marker }}"}'
+        payload: '"${{ inputs.deployment-payload-marker }}"'
 
     - name: sleep before deployment cleanup
       shell: bash
