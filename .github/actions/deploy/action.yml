@@ -32,7 +32,7 @@ runs:
     - name: sleep before creating new deployment
       shell: bash
       run: |
-        sleep 60
+        sleep 30
 
     - name: Create GitHub deployment
       uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1  # v2.0.7
@@ -42,10 +42,23 @@ runs:
         environment: ${{ inputs.environment }}
         payload: '"${{ inputs.deployment-payload-marker }}"'
 
+    - name: sleep before deployment activation
+      shell: bash
+      run: |
+        sleep 30
+
+    - name: Update deployment status (active)
+      if: success()
+      uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806  # v2.0.3
+      with:
+        token: ${{ github.token }}
+        deployment-id: ${{ steps.create-deployment.outputs.deployment_id }}
+        state: active
+
     - name: sleep before deployment cleanup
       shell: bash
       run: |
-        sleep 60
+        sleep 30
 
     - name: Clean up redundant GitHub deployments
       uses: ./.github/actions/cleanup-redundant-deployments
@@ -53,6 +66,11 @@ runs:
         version: ${{ inputs.version }}
         deployment-environment: ${{ inputs.environment }}
         deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
+
+    - name: sleep before deployment in progress
+      shell: bash
+      run: |
+        sleep 30
 
     - name: Update deployment status (in progress)
       if: success()
@@ -73,7 +91,7 @@ runs:
     - name: sleep before deployment status update
       shell: bash
       run: |
-        sleep 60
+        sleep 30
 
     - name: Update deployment status (success)
       if: success()
