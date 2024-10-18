@@ -43,6 +43,8 @@ deployment_ids=$(gh api graphql \
     --arg deploymentPayloadMarker "$DEPLOYMENT_PAYLOAD_MARKER" "$jq_query")
 
 for deployment_id in $deployment_ids; do
+  gh api --silent -X POST "/repos/{owner}/{repo}/deployments/${deployment_id}/statuses" \
+    -f state="inactive"
   gh api --silent -X DELETE "/repos/{owner}/{repo}/deployments/${deployment_id}"
   echo "::notice::Redundant GitHub deployment object '${deployment_id}' was deleted."
 done
