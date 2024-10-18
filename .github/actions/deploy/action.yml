@@ -37,12 +37,12 @@ runs:
         environment: ${{ inputs.environment }}
         payload: '"${{ inputs.deployment-payload-marker }}"'
 
-    # - name: Clean up redundant GitHub deployments
-    #   uses: ./.github/actions/cleanup-redundant-deployments
-    #   with:
-    #     version: ${{ inputs.version }}
-    #     deployment-environment: ${{ inputs.environment }}
-    #     deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
+    - name: Clean up redundant GitHub deployments
+      uses: ./.github/actions/cleanup-redundant-deployments
+      with:
+        version: ${{ inputs.version }}
+        deployment-environment: ${{ inputs.environment }}
+        deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
     - name: Update deployment status (in progress)
       if: success()
@@ -81,10 +81,15 @@ runs:
         deployment-id: ${{ steps.create-deployment.outputs.deployment_id }}
         state: failure
 
-    # - name: Clean up redundant GitHub deployments
-    #   if: success() || failure()
-    #   uses: ./.github/actions/cleanup-redundant-deployments
-    #   with:
-    #     version: ${{ inputs.version }}
-    #     deployment-environment: ${{ inputs.environment }}
-    #     deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
+    - name: Clean up redundant GitHub deployments
+      if: success() || failure()
+      uses: ./.github/actions/cleanup-redundant-deployments
+      with:
+        version: ${{ inputs.version }}
+        deployment-environment: ${{ inputs.environment }}
+        deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
+
+    - name: sleep before success
+      shell: bash
+      run: |
+        sleep 30
