@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches-ignore:
-      - 'deploy/**'  # XXX deploy or release?
       - 'release/**'
       - 'rollback/**'
 
@@ -15,7 +14,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    environment: 'dev'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

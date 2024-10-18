@@ -7,15 +7,12 @@ on:
 jobs:
   deploy:
     name: Deploy to 'prod'
-    # XXX deploy or release?
     if: |
       github.event_name == 'release'
       &&
       github.event.release.prerelease == false
       &&
       (
-        startsWith(github.event.release.target_commitish, 'deploy/')
-        ||
         startsWith(github.event.release.target_commitish, 'release/')
         ||
         startsWith(github.event.release.target_commitish, 'rollback/')
