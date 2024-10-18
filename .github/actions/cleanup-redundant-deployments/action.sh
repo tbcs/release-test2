@@ -28,7 +28,6 @@ query ($repoOwner: String!, $repoName: String!, $environment: String!) {
 
 jq_query='
 .data.repository.deployments.nodes
-| map(select(.latestStatus.state == "INACTIVE"))
 | map(select(.commitOid | startswith($version)))
 | map(select((.payload // "") | contains($deploymentPayloadMarker) | not))
 | [ .[] | .databaseId ] | @tsv
