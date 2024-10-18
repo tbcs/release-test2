@@ -1,8 +1,7 @@
 name: Clean up redundant GitHub deployments
 
 on:
-  deployment_status:
-    types: [success, failure, inactive]
+  deployment_status
 
 jobs:
   cleanup:
