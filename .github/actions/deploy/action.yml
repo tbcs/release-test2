@@ -29,6 +29,11 @@ runs:
         prerequisite-environment: ${{ inputs.prerequisite-environment }}
         deployment-payload-marker: ${{ inputs.deployment-payload-marker }}
 
+    - name: sleep before creating new deployment
+      shell: bash
+      run: |
+        sleep 60
+
     - name: Create GitHub deployment
       uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1  # v2.0.7
       id: create-deployment
@@ -36,6 +41,11 @@ runs:
         token: ${{ github.token }}
         environment: ${{ inputs.environment }}
         payload: '{"name": "${{ inputs.deployment-payload-marker }}"}'
+
+    - name: sleep before deployment cleanup
+      shell: bash
+      run: |
+        sleep 60
 
     - name: Clean up redundant GitHub deployments
       uses: ./.github/actions/cleanup-redundant-deployments
@@ -51,6 +61,11 @@ runs:
         # false
         sleep 5
         echo "deployment completed"
+
+    - name: sleep before deployment status update
+      shell: bash
+      run: |
+        sleep 60
 
     - name: Update deployment status (success)
       if: success()
