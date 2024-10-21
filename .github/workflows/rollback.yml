@@ -1,11 +1,11 @@
-name: Rollback on 'prod'
+name: Rollback in 'prod'
 
 on:
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Rollback on 'prod'
+    name: Rollback in 'prod'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: 'prod'
